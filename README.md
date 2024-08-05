@@ -1,4 +1,5 @@
-# FileVault
+# FileVault 
+[![Node.js CI](https://github.com/Andrew-McMahon7/filevault/actions/workflows/node.js.yml/badge.svg)](https://github.com/Andrew-McMahon7/filevault/actions/workflows/node.js.yml)
 
 FileVault is a modern file uploading application with versions for both AWS S3 and Azure Blob Storage. It features a clean interface with light/dark mode toggle and file management capabilities.
 
