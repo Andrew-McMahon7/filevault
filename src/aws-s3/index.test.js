@@ -5,8 +5,8 @@ let chai, chaiHttp, sinon, app, db, S3Client, DeleteObjectCommand, Upload;
     chai = await import('chai');
     chaiHttp = await import('chai-http');
     sinon = await import('sinon');
-    app = (await import('../aws-s3/index')).default; // Adjust the path as necessary
-    db = (await import('../aws-s3/db')).default;
+    app = (await import('./index')).default; // Adjust the path as necessary
+    db = (await import('./db')).default;
     S3Client = (await import('@aws-sdk/client-s3')).S3Client;
     DeleteObjectCommand = (await import('@aws-sdk/client-s3')).DeleteObjectCommand;
     Upload = (await import('@aws-sdk/lib-storage')).Upload;
