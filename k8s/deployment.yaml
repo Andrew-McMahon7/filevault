@@ -15,10 +15,21 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: nginx:1.14.2
+          image: 055624675055.dkr.ecr.eu-west-2.amazonaws.com/woc_image_repo_alm:latest
           ports:
             - name: web
-              containerPort: 80
+              containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+            - name: AWS_ACCESS_KEY_ID
+              value: ${BUCKET_AWS_ACCESS_KEY_ID}
+            - name: AWS_SECRET_ACCESS_KEY
+              value: ${BUCKET_AWS_SECRET_ACCESS_KEY}
+            - name: AWS_REGION
+              value: ${AWS_REGION}
+            - name: S3_BUCKET_NAME
+              value: ${S3_BUCKET_NAME}
           resources:
             requests:
               memory: 256Mi
