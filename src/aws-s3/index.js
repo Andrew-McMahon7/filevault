@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
-const { S3Client, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const { Upload } = require('@aws-sdk/lib-storage');
 
 const app = express();
