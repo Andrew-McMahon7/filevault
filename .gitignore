@@ -29,4 +29,3 @@ Thumbs.db
 
 # Uploads
 **/uploads/
-/.terraform.lock.hcl
