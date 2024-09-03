@@ -13,9 +13,6 @@ services:
       - S3_BUCKET_NAME=${S3_BUCKET_NAME}
     ports:
       - "3000:3000"
-    depends_on:
-      db:
-        condition: service_healthy
 
 volumes:
   postgres_woc_data:
