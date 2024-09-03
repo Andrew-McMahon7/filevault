@@ -118,7 +118,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
             fs.unlinkSync(req.file.path); // remove the file locally after upload
 
             // Insert the file entry into the database
-            putItem(fileName, req.file.filename);
+            await putItem(fileName, req.file.filename);
 
             // Reload the files array
             files = loadFilesData();
@@ -154,7 +154,7 @@ app.delete('/files/:key', async (req, res) => {
         await s3.send(new DeleteObjectCommand(deleteParams));
 
         // Delete the file entry from the database
-        deleteItem(fileName, fileKey);
+        await deleteItem(fileName, fileKey);
 
         // Reload the files array
         files = loadFilesData();
