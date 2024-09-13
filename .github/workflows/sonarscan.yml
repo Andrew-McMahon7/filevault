@@ -1,9 +1,7 @@
 name: SonarScan
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_call:
+
 jobs:
   sonarcloud:
     name: SonarCloud

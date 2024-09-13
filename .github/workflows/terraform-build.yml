@@ -7,10 +7,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    uses: ./.gitub/workflows/node.js.yml
-  sonarcloud:
-    uses: ./.gitub/workflows/sonarscan.yml
+  call_soncarcloud:
+    uses: ./.github/workflows/sonarscan.yml
   terraform:
     name: Terraform
     needs:
