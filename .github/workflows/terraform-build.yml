@@ -72,5 +72,5 @@ jobs:
         run: |
           terraform plan
 
-#      - name: Apply Terraform configuration
-#        run: terraform apply -auto-approve
+      - name: Apply Terraform configuration
+        run: terraform apply -auto-approve
