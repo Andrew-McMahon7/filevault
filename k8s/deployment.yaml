@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: filevault
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: filevault
   template:
     metadata:
       labels:
-        app: nginx
+        app: filevault
     spec:
       containers:
-        - name: nginx
+        - name: filevault
           image: 055624675055.dkr.ecr.eu-west-2.amazonaws.com/woc_image_repo_alm:latest
           ports:
             - name: web
