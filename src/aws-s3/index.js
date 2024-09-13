@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer');
+const db = require('./db');
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
@@ -20,18 +21,14 @@ const s3 = new S3Client({
     }
 });
 
-const filesDataPath = './filesData.json';
-
-const loadFilesData = () => {
-    if (fs.existsSync(filesDataPath)) {
-        const data = fs.readFileSync(filesDataPath);
-        return JSON.parse(data);
+const loadFilesData = async () => {
+    try {
+        const result = await db.query('SELECT * FROM filesData');
+        return result.rows;
+    } catch (err) {
+        console.error(err);
+        return [];
     }
-    return [];
-};
-
-const saveFilesData = (files) => {
-    fs.writeFileSync(filesDataPath, JSON.stringify(files, null, 2));
 };
 
 let files = loadFilesData();
@@ -62,8 +59,11 @@ app.post('/upload', upload.single('file'), async (req, res) => {
             await upload.done();
             fs.unlinkSync(req.file.path); // remove the file locally after upload
 
-            files.push({ name: fileName, key: req.file.filename });
-            saveFilesData(files);
+            // Insert the file entry into the database
+            await db.query('INSERT INTO filesData (name, key) VALUES ($1, $2)', [fileName, req.file.filename]);
+
+            // Reload the files array
+            files = loadFilesData();
 
             res.status(200).send('File uploaded successfully.');
         } catch (err) {
@@ -76,7 +76,9 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 });
 
 app.get('/files', (req, res) => {
-    res.json(files);
+    files.then((files) => {
+        res.json(files);
+    });
 });
 
 app.delete('/files/:key', async (req, res) => {
@@ -90,8 +92,11 @@ app.delete('/files/:key', async (req, res) => {
 
         await s3.send(new DeleteObjectCommand(deleteParams));
 
-        files = files.filter(file => file.key !== fileKey);
-        saveFilesData(files);
+        // Delete the file entry from the database
+        await db.query('DELETE FROM filesData WHERE key = $1', [fileKey]);
+
+        // Reload the files array
+        files = loadFilesData();
 
         res.status(200).send('File deleted successfully.');
     } catch (err) {
