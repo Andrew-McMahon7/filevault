@@ -1,0 +1,44 @@
+name: Terraform Build
+
+on:
+  workflow_run:
+    workflows: ["Node.js CI", "SonarScan"]
+    types:
+      - completed
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.9.5
+
+      - name: Set workspace name
+        id: workspace
+        run: |
+          if [ "${{ github.event.workflow_run.head_branch }}" == "master" ]; then
+            echo "workspace=prod" >> $GITHUB_ENV
+          else
+            pr_number=$(echo "${{ github.event.workflow_run.head_branch }}" | grep -oP '\d+')
+            echo "workspace=pr-${pr_number}" >> $GITHUB_ENV
+          fi
+
+      - name: Initialize Terraform
+        run: terraform init
+
+#      - name: Create or select Terraform workspace
+#        run: |
+#          terraform workspace new ${{ env.workspace }} || terraform workspace select ${{ env.workspace }}
+#
+#      - name: Plan Terraform configuration
+#        run: |
+#          terraform plan
+
+#      - name: Apply Terraform configuration
+#        run: terraform apply -auto-approve
