@@ -64,13 +64,13 @@ jobs:
       - name: Initialize Terraform
         run: terraform init
 
-#      - name: Create or select Terraform workspace
-#        run: |
-#          terraform workspace new ${{ env.workspace }} || terraform workspace select ${{ env.workspace }}
-#
-#      - name: Plan Terraform configuration
-#        run: |
-#          terraform plan
+      - name: Create or select Terraform workspace
+        run: |
+          terraform workspace new ${{ env.workspace }} || terraform workspace select ${{ env.workspace }}
+
+      - name: Plan Terraform configuration
+        run: |
+          terraform plan
 
 #      - name: Apply Terraform configuration
 #        run: terraform apply -auto-approve
