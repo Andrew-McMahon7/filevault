@@ -10,7 +10,7 @@ jobs:
   soncarcloud:
     uses: ./.github/workflows/sonarscan.yml
     secrets:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   build-NodeJS:
     uses: ./.github/workflows/node.js.yml
@@ -34,6 +34,12 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.9.5
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: eu-west-2
 
       - name: Extract branch name
         shell: bash
