@@ -55,10 +55,10 @@ jobs:
         id: workspace
         run: |
           if [ "${{ steps.extract_branch.outputs.branch }}" == "master" ]; then
-            echo "workspace=prod" >> $GITHUB_ENV
+            echo "workspace=filevault-prod" >> $GITHUB_ENV
           else
             pr_number=$(echo "${{ steps.extract_branch.outputs.branch }}" | grep -oP '\d+')
-            echo "workspace=pr-${pr_number}" >> $GITHUB_ENV
+            echo "workspace=filevault-pr-${pr_number}" >> $GITHUB_ENV
           fi
 
       - name: Initialize Terraform
