@@ -6,13 +6,16 @@ on:
   pull_request:
     branches: [ "main" ]
 
-  workflow_run:
-    workflows: ["Node.js CI", "SonarScan"]
-    types:
-      - completed
-
 jobs:
+  build:
+    uses: ./.gitub/workflows/node.js.yml
+  sonarcloud:
+    uses: ./.gitub/workflows/sonarscan.yml
   terraform:
+    name: Terraform
+    needs:
+      - build
+      - sonarcloud
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
