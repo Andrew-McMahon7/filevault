@@ -1,6 +1,11 @@
 name: SonarScan
 on:
   workflow_call:
+    secrets:
+      SONAR_TOKEN:
+        description: 'SonarCloud token'
+        required: true
+
 
 jobs:
   sonarcloud:
