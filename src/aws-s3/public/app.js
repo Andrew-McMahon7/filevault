@@ -58,7 +58,7 @@ async function loadFiles() {
       row.innerHTML = `
           <td>${file.name}</td>
           <td>${file.key}</td>
-          <td><button onclick="deleteFile('${file.key}')">Delete</button></td>
+          <td><button onclick="deleteFile('${file.key}', '${file.name}')">Delete</button></td>
       `;
       table.querySelector('tbody').appendChild(row);
   });
@@ -67,9 +67,13 @@ async function loadFiles() {
 }
 
 // eslint-disable-next-line no-unused-vars
-async function deleteFile(fileKey) {
+async function deleteFile(fileKey, fileName) {
   const response = await fetch(`/files/${fileKey}`, {
-      method: 'DELETE',
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: fileName })
   });
 
   if (response.ok) {

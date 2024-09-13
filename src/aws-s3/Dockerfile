@@ -1,4 +1,4 @@
-FROM node:22.1
+FROM --platform=linux/amd64 node:22.1
 LABEL authors="andrewmcmahon"
 
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
@@ -13,4 +13,4 @@ COPY --chown=node:node .. .
 
 EXPOSE 3000
 
-CMD [ "node", "index.js" ]
+ENTRYPOINT [ "node", "index.js" ]
