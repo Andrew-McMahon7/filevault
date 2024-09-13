@@ -16,7 +16,9 @@ jobs:
     uses: ./.github/workflows/node.js.yml
 
   terraform:
-    needs: call_soncarcloud
+    needs:
+      - build-NodeJS
+      - soncarcloud
 
     runs-on: ubuntu-latest
 
