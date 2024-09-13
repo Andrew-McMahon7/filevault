@@ -1,8 +1,8 @@
 resource "aws_dynamodb_table" "basic-dynamodb-table" {
-  name           = "DynamoDB-Terraform"
+  name           = "DynamoDB-Terraform-${local.environment}"
   billing_mode   = "PROVISIONED"
-  read_capacity  = 20
-  write_capacity = 20
+  read_capacity  = 10
+  write_capacity = 10
   hash_key       = "name"
   range_key      = "key"
 
@@ -20,11 +20,13 @@ resource "aws_dynamodb_table" "basic-dynamodb-table" {
     name               = "nameIndex"
     hash_key           = "name"
     range_key          = "key"
-    write_capacity     = 10
-    read_capacity      = 10
-    projection_type    = "KEYS_ONLY"  # Corrected projection_type
+    write_capacity     = 5
+    read_capacity      = 5
+    projection_type    = "KEYS_ONLY"
     non_key_attributes = []
   }
+
+  depends_on = [null_resource.enforce_workspace]
 }
 
 resource "aws_dynamodb_table_item" "item" {
@@ -37,6 +39,8 @@ resource "aws_dynamodb_table_item" "item" {
     "key": {"S": "fc120b543a793c78ffad7d0ebd167462"}
   }
   ITEM
+
+  depends_on = [aws_dynamodb_table.basic-dynamodb-table]
 }
 
 resource "aws_dynamodb_table_item" "item2" {
@@ -49,4 +53,6 @@ resource "aws_dynamodb_table_item" "item2" {
     "key": {"S": "baa1e28f2731605a79848018ebf92219"}
   }
   ITEM
+
+  depends_on = [aws_dynamodb_table.basic-dynamodb-table]
 }

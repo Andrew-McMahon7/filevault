@@ -1,5 +1,5 @@
 resource "aws_iam_role" "cluster-role" {
-  name = "eks-cluster-cluster-role"
+  name = "eks-cluster-cluster-role-${local.environment}"
 
   assume_role_policy = <<POLICY
 {
@@ -15,15 +15,19 @@ resource "aws_iam_role" "cluster-role" {
   ]
 }
 POLICY
+
+  depends_on = [null_resource.enforce_workspace]
 }
 
 resource "aws_iam_role_policy_attachment" "filevault-AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.cluster-role.name
+
+  depends_on = [null_resource.enforce_workspace]
 }
 
 resource "aws_eks_cluster" "filevault-eks" {
-  name     = "filevault-eks"
+  name     = "filevault-eks-${local.environment}"
   role_arn = aws_iam_role.cluster-role.arn
 
   vpc_config {
