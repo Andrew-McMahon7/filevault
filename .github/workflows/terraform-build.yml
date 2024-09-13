@@ -13,7 +13,6 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   terraform:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
