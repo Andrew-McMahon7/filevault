@@ -23,13 +23,18 @@ jobs:
         with:
           terraform_version: 1.9.5
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
       - name: Set workspace name
         id: workspace
         run: |
-          if [ "${{ github.event.workflow_run.head_branch }}" == "master" ]; then
+          if [ "${{ steps.extract_branch.outputs.branch }}" == "master" ]; then
             echo "workspace=prod" >> $GITHUB_ENV
           else
-            pr_number=$(echo "${{ github.event.workflow_run.head_branch }}" | grep -oP '\d+')
+            pr_number=$(echo "${{ steps.extract_branch.outputs.branch }}" | grep -oP '\d+')
             echo "workspace=pr-${pr_number}" >> $GITHUB_ENV
           fi
 
