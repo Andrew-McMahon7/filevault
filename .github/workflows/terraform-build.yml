@@ -92,9 +92,17 @@ jobs:
         run: envsubst < k8s/deployment.yaml | kubectl apply -f -
         working-directory: ./
 
-      - name: Deploy Public Load Balancer
-        run: kubectl apply -f k8s/public-lb.yaml
+      - name: Get Pods
+        run: kubectl get pods
         working-directory: ./
+
+      - name: Get Logs
+        run: kubectl logs -f $(kubectl get pods -o jsonpath='{.items[0].metadata.name}')
+        working-directory: ./
+
+#      - name: Deploy Public Load Balancer
+#        run: kubectl apply -f k8s/public-lb.yaml
+#        working-directory: ./
 
 
 #      - name: Destroy Terraform configuration
