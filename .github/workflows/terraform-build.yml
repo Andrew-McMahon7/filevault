@@ -88,45 +88,14 @@ jobs:
       - name: Update kube config
         run: aws eks update-kubeconfig --name "filevault-eks-${{ env.workspace }}" --region eu-west-2
 
-      - name: Create a ClusterRole with the necessary permissions
-        run: kubectl apply -f k8s/clusterrole.yaml
+
+      - name: Delete Load Balancer
+        run: kubectl delete -f k8s/public-lb.yaml
         working-directory: ./
 
-      - name: Create a ClusterRoleBinding to bind the root user to the ClusterRole
-        run: kubectl apply -f k8s/clusterrolebinding.yaml
+      - name: Delete Deployment
+        run: kubectl delete -f k8s/deployment.yaml
         working-directory: ./
-
-      - name: Deploy to Kubernetes
-        run: envsubst < k8s/deployment.yaml | kubectl apply -f -
-        working-directory: ./
-
-      - name: Get Pods
-        run: kubectl get pods
-        working-directory: ./
-
-      - name: Get Logs
-        run: kubectl logs $(kubectl get pods -o jsonpath='{.items[0].metadata.name}')
-        working-directory: ./
-
-      - name: Deploy Public Load Balancer
-        run: kubectl apply -f k8s/public-lb.yaml
-        working-directory: ./
-
-      - name: Get Load Balancer
-        run: kubectl get svc public-lb
-        working-directory: ./
-
-      - name: Update Kubeconfig for root user
-        run: aws eks update-kubeconfig --name "filevault-eks-${{ env.workspace }}" --region eu-west-2 --role-arn arn:aws:iam::055624675055:andrewlocal
-        working-directory: ./
-
-#      - name: Delete Load Balancer
-#        run: kubectl delete -f k8s/public-lb.yaml
-#        working-directory: ./
-#
-#      - name: Delete Deployment
-#        run: kubectl delete -f k8s/deployment.yaml
-#        working-directory: ./
 #
 #      - name: Destroy Terraform configuration
 #        run: terraform destroy -auto-approve
