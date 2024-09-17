@@ -5,7 +5,7 @@ metadata:
   name: eks-admin-binding-root
 subjects:
   - kind: User
-    name: "arn:aws:iam::<AWS_ACCOUNT_ID>:root"
+    name: "arn:aws:iam::055624675055:root"
     apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: ClusterRole
