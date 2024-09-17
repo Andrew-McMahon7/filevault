@@ -89,14 +89,12 @@ jobs:
         run: aws eks update-kubeconfig --name "filevault-eks-${{ env.workspace }}" --region eu-west-2
 
       - name: Deploy to Kubernetes
-        run: |
-         cd .. |
-         envsubst < k8s/deployment.yaml | kubectl apply -f -
+        run: envsubst < k8s/deployment.yaml | kubectl apply -f -
+        working-directory: ./
 
       - name: Deploy Public Load Balancer
-        run:
-          cd .. |   
-          kubectl apply -f k8s/public-lb.yaml
+        run: kubectl apply -f k8s/public-lb.yaml
+        working-directory: ./
 
 
 #      - name: Destroy Terraform configuration
