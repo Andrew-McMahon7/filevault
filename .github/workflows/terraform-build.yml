@@ -104,13 +104,16 @@ jobs:
         run: kubectl apply -f k8s/public-lb.yaml
         working-directory: ./
 
-      - name: Get Load Balancer DNS
-        run: kubectl get svc public-lb
+      - name: Delete Load Balancer
+        run: kubectl delete -f k8s/public-lb.yaml
         working-directory: ./
 
-      - name: Get Load Balancer DNS v2
-        run: kubectl get service public-lb -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+      - name: Delete Deployment
+        run: kubectl delete -f k8s/deployment.yaml
         working-directory: ./
+
+      - name: Delete Terraform
+        run: terraform delete -auto-approve
 
 
 #      - name: Destroy Terraform configuration
