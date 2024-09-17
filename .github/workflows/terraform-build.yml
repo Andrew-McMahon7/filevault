@@ -73,3 +73,13 @@ jobs:
 
       - name: Apply Terraform configuration
         run: terraform apply -auto-approve
+
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name ${{ env.workspace }} --region eu-west-2
+
+      - name: Get Pods in the cluster
+        run: kubectl get pods
+
+
+#      - name: Destroy Terraform configuration
+#        run: terraform destroy -auto-approve
