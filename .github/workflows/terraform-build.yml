@@ -88,14 +88,36 @@ jobs:
       - name: Update kube config
         run: aws eks update-kubeconfig --name "filevault-eks-${{ env.workspace }}" --region eu-west-2
 
-
-      - name: Delete Load Balancer
-        run: kubectl delete -f k8s/public-lb.yaml
+      - name: Update aws-auth ConfigMap
+        run: kubectl apply -f k8s/aws-auth-configmap.yaml
         working-directory: ./
 
-      - name: Delete Deployment
-        run: kubectl delete -f k8s/deployment.yaml
+      - name: View Kubectl config view
+        run: kubectl config view
+
+      - name: Apply Kubernetes configuration
+        run: envsubst < k8s/deployment.yaml | kubectl apply -f -
         working-directory: ./
+
+      - name: Get Kubectl Deployment
+        run: kubectl get deployments
+        working-directory: ./
+
+      - name: Get Kubectl Pods
+        run: kubectl get pods
+        working-directory: ./
+
+      - name: Apply Kube Load Balancer
+        run: kubectl apply -f k8s/public-lb.yaml
+        working-directory: ./
+
+#      - name: Delete Load Balancer
+#        run: kubectl delete -f k8s/public-lb.yaml
+#        working-directory: ./
+#
+#      - name: Delete Deployment
+#        run: kubectl delete -f k8s/deployment.yaml
+#        working-directory: ./
 #
 #      - name: Destroy Terraform configuration
 #        run: terraform destroy -auto-approve
