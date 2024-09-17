@@ -29,7 +29,7 @@ const dynamoDBClient = new DynamoDBClient({
     },
 });
 
-const dynamoDBTable = 'DynamoDB-Terraform';
+const dynamoDBTable = process.env.DYNAMO_DB_TABLE;
 
 const formatItems = (items) => {
     return items.map(item => {
