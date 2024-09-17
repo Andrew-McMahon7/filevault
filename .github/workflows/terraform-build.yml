@@ -104,6 +104,14 @@ jobs:
         run: kubectl apply -f k8s/public-lb.yaml
         working-directory: ./
 
+      - name: Get Load Balancer DNS
+        run: kubectl get svc public-lb
+        working-directory: ./
+
+      - name: Get Load Balancer DNS v2
+        run: kubectl get service public-lb -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+        working-directory: ./
+
 
 #      - name: Destroy Terraform configuration
 #        run: terraform destroy -auto-approve
