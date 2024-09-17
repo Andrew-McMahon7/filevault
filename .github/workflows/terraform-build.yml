@@ -88,6 +88,14 @@ jobs:
       - name: Update kube config
         run: aws eks update-kubeconfig --name "filevault-eks-${{ env.workspace }}" --region eu-west-2
 
+      - name: Create a ClusterRole with the necessary permissions
+        run: kubectl apply -f k8s/clusterrole.yaml
+        working-directory: ./
+
+      - name: Create a ClusterRoleBinding to bind the root user to the ClusterRole
+        run: kubectl apply -f k8s/clusterrolebinding.yaml
+        working-directory: ./
+
       - name: Deploy to Kubernetes
         run: envsubst < k8s/deployment.yaml | kubectl apply -f -
         working-directory: ./
@@ -112,9 +120,5 @@ jobs:
 #        run: kubectl delete -f k8s/deployment.yaml
 #        working-directory: ./
 #
-#      - name: Delete Terraform
-#        run: terraform destroy -auto-approve
-
-
 #      - name: Destroy Terraform configuration
 #        run: terraform destroy -auto-approve
