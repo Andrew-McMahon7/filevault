@@ -80,10 +80,17 @@ jobs:
 
       - name: Plan Terraform configuration
         run: |
-          terraform plan
+          terraform plan -out=tfplan
 
       - name: Apply Terraform configuration
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve tfplan
+
+      - name: Capture Subnet IDs
+        id: capture_subnets
+        run: |
+          echo "SUBNET_ID_1=$(terraform output -raw public_subnet_id_eu_west_2a)" >> $GITHUB_ENV
+          echo "SUBNET_ID_2=$(terraform output -raw public_subnet_id_eu_west_2b)" >> $GITHUB_ENV
+
 
       - name: Update kube config
         run: aws eks update-kubeconfig --name "filevault-eks-${{ env.workspace }}" --region eu-west-2
@@ -108,7 +115,7 @@ jobs:
         working-directory: ./
 
       - name: Apply Kube Load Balancer
-        run: kubectl apply -f k8s/public-lb.yaml
+        run: envsubst < k8s/public-lb.yaml | kubectl apply -f -
         working-directory: ./
 
 #      - name: Delete Load Balancer
