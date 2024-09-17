@@ -112,6 +112,14 @@ jobs:
         run: kubectl apply -f k8s/public-lb.yaml
         working-directory: ./
 
+      - name: Get Load Balancer
+        run: kubectl get svc public-lb
+        working-directory: ./
+
+      - name: Update Kubeconfig for root user
+        run: aws eks update-kubeconfig --name "filevault-eks-${{ env.workspace }}" --region eu-west-2 --role-arn arn:aws:iam::055624675055:root
+        working-directory: ./
+
 #      - name: Delete Load Balancer
 #        run: kubectl delete -f k8s/public-lb.yaml
 #        working-directory: ./
