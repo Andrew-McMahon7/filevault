@@ -75,7 +75,7 @@ jobs:
         run: terraform apply -auto-approve
 
       - name: Update kube config
-        run: aws eks update-kubeconfig --name ${{ env.workspace }} --region eu-west-2
+        run: aws eks update-kubeconfig --name "filevault-eks-${{ env.workspace }}" --region eu-west-2
 
       - name: Get Pods in the cluster
         run: kubectl get pods
