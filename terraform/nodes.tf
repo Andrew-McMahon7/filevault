@@ -36,6 +36,13 @@ resource "aws_iam_role_policy_attachment" "nodes-AmazonEC2ContainerRegistryReadO
   depends_on = [null_resource.enforce_workspace]
 }
 
+resource "aws_iam_role_policy_attachment" "nodes-AdministratorAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  role       = aws_iam_role.nodes.name
+
+  depends_on = [null_resource.enforce_workspace]
+}
+
 resource "aws_eks_node_group" "private-nodes" {
   cluster_name    = aws_eks_cluster.filevault-eks.name
   node_group_name = "private-nodes-${local.environment}"
@@ -67,6 +74,7 @@ resource "aws_eks_node_group" "private-nodes" {
     aws_iam_role_policy_attachment.nodes-AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.nodes-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.nodes-AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.nodes-AdministratorAccess,
     null_resource.enforce_workspace
   ]
 }

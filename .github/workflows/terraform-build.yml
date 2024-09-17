@@ -104,16 +104,16 @@ jobs:
         run: kubectl apply -f k8s/public-lb.yaml
         working-directory: ./
 
-      - name: Delete Load Balancer
-        run: kubectl delete -f k8s/public-lb.yaml
-        working-directory: ./
-
-      - name: Delete Deployment
-        run: kubectl delete -f k8s/deployment.yaml
-        working-directory: ./
-
-      - name: Delete Terraform
-        run: terraform destroy -auto-approve
+#      - name: Delete Load Balancer
+#        run: kubectl delete -f k8s/public-lb.yaml
+#        working-directory: ./
+#
+#      - name: Delete Deployment
+#        run: kubectl delete -f k8s/deployment.yaml
+#        working-directory: ./
+#
+#      - name: Delete Terraform
+#        run: terraform destroy -auto-approve
 
 
 #      - name: Destroy Terraform configuration
