@@ -65,12 +65,11 @@ jobs:
 
       - name: Export environment variables
         run: |
-          export AWS_ACCESS_KEY_ID=${{ secrets.BUCKET_AWS_ACCESS_KEY_ID }} |
-          export AWS_SECRET_ACCESS_KEY=${{ secrets.BUCKET_AWS_SECRET_ACCESS_KEY }} |
-          export AWS_REGION=${{ secrets.AWS_REGION }} |
-          export S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }} |
-          export DYNAMO_DB_TABLE=${{ env.DYNAMO_DB_TABLE }} |
-          export PORT=${{ secrets.PORT }}
+          echo "export AWS_ACCESS_KEY_ID=${{ secrets.BUCKET_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "export AWS_SECRET_ACCESS_KEY=${{ secrets.BUCKET_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "export AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
+          echo "export S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}" >> $GITHUB_ENV
+          echo "export PORT=${{ secrets.PORT }}" >> $GITHUB_ENV
 
       - name: Initialize Terraform
         run: terraform init
