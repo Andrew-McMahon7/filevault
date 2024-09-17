@@ -117,7 +117,7 @@ jobs:
         working-directory: ./
 
       - name: Update Kubeconfig for root user
-        run: aws eks update-kubeconfig --name "filevault-eks-${{ env.workspace }}" --region eu-west-2 --role-arn arn:aws:iam::055624675055:root
+        run: aws eks update-kubeconfig --name "filevault-eks-${{ env.workspace }}" --region eu-west-2 --role-arn arn:aws:iam::055624675055:andrewlocal
         working-directory: ./
 
 #      - name: Delete Load Balancer
