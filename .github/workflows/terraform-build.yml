@@ -7,17 +7,17 @@ on:
     branches: [ "main" ]
 
 jobs:
-  docker-build-push:
-    uses: ./.github/workflows/docker.yml
-    secrets:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+#  docker-build-push:
+#    uses: ./.github/workflows/docker.yml
+#    secrets:
+#      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+#      AWS_REGION: ${{ secrets.AWS_REGION }}
+#      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
   terraform:
-    needs:
-      - docker-build-push
+#    needs:
+#      - docker-build-push
 
     runs-on: ubuntu-latest
 
