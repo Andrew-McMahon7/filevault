@@ -63,12 +63,14 @@ jobs:
       - name: Set DynamoDB table name
         run: echo "DYNAMO_DB_TABLE=DynamoDB-Terraform-${{ env.workspace }}" >> $GITHUB_ENV
 
+      - name: Set S3 bucket name
+        run: echo "S3_BUCKET_NAME=andrewwocbucket-${{ env.workspace }}" >> $GITHUB_ENV
+
       - name: Export environment variables
         run: |
           echo "BUCKET_AWS_ACCESS_KEY_ID=${{ secrets.BUCKET_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "BUCKET_AWS_SECRET_ACCESS_KEY=${{ secrets.BUCKET_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
           echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
-          echo "S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}" >> $GITHUB_ENV
           echo "PORT=${{ secrets.PORT }}" >> $GITHUB_ENV
 
       - name: Initialize Terraform
