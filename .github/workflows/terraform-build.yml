@@ -103,6 +103,12 @@ jobs:
         run: kubectl apply -f k8s/public-lb.yaml
         working-directory: ./
 
+      - name: Patch Deployment to force re-deploy
+        run: |
+          kubectl patch deployment filevault -p \
+            "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"kubectl.kubernetes.io/restartedAt\":\"$(date +%Y-%m-%dT%H:%M:%S%z)\"}}}}}"
+        working-directory: ./
+
 #      - name: Delete Load Balancer
 #        run: kubectl delete -f k8s/public-lb.yaml
 #        working-directory: ./
