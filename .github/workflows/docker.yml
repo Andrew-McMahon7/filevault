@@ -65,6 +65,7 @@ jobs:
             echo "IMAGE_TAG=latest" >> $GITHUB_ENV
           else
             echo "IMAGE_TAG=pr-${{ github.event.number }}" >> $GITHUB_ENV
+          fi
 
       - name: Login to ECR
         run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com

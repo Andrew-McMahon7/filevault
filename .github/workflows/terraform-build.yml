@@ -53,12 +53,12 @@ jobs:
       - name: Set workspace name
         id: workspace
         run: |
-          if [ "${{ steps.extract_branch.outputs.branch }}" == "master" ]; then
+          if [ "${{ steps.extract_branch.outputs.branch }}" == "main" ]; then
             echo "workspace=filevault-prod" >> $GITHUB_ENV
-            echo "IMGAE_TAG=latest" >> $GITHUB_ENV
+            echo "IMAGE_TAG=latest" >> $GITHUB_ENV
           else
             echo "workspace=filevault-pr-${{ github.event.number }}" >> $GITHUB_ENV
-            echo "IMGAE_TAG=pr-${{ github.event.number }}" >> $GITHUB_ENV
+            echo "IMAGE_TAG=pr-${{ github.event.number }}" >> $GITHUB_ENV
           fi
 
       - name: Set DynamoDB table name
