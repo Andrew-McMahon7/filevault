@@ -65,11 +65,11 @@ jobs:
 
       - name: Export environment variables
         run: |
-          echo "export AWS_ACCESS_KEY_ID=${{ secrets.BUCKET_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
-          echo "export AWS_SECRET_ACCESS_KEY=${{ secrets.BUCKET_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
-          echo "export AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
-          echo "export S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}" >> $GITHUB_ENV
-          echo "export PORT=${{ secrets.PORT }}" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.BUCKET_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.BUCKET_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
+          echo "S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}" >> $GITHUB_ENV
+          echo "PORT=${{ secrets.PORT }}" >> $GITHUB_ENV
 
       - name: Initialize Terraform
         run: terraform init
