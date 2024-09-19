@@ -16,6 +16,7 @@ spec:
       containers:
         - name: filevault
           image: 055624675055.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${IMAGE_TAG}
+          imagePullPolicy: Always
           ports:
             - name: web
               containerPort: 3000
