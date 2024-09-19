@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: filevault
-          image: 055624675055.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:latest
+          image: 055624675055.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${IMAGE_TAG}
           ports:
             - name: web
               containerPort: 3000

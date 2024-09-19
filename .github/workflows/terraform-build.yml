@@ -7,13 +7,13 @@ on:
     branches: [ "main" ]
 
 jobs:
-  soncarcloud:
-    uses: ./.github/workflows/sonarscan.yml
+  docker:
+    uses: ./.github/workflows/docker.yml
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  build-NodeJS:
-    uses: ./.github/workflows/node.js.yml
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
   terraform:
     needs:
@@ -56,8 +56,10 @@ jobs:
         run: |
           if [ "${{ steps.extract_branch.outputs.branch }}" == "master" ]; then
             echo "workspace=filevault-prod" >> $GITHUB_ENV
+            echo "IMGAE_TAG=latest" >> $GITHUB_ENV
           else
             echo "workspace=filevault-pr-${{ github.event.number }}" >> $GITHUB_ENV
+            echo "IMGAE_TAG=pr-${{ github.event.number }}" >> $GITHUB_ENV
           fi
 
       - name: Set DynamoDB table name
@@ -66,7 +68,7 @@ jobs:
       - name: Set S3 bucket name
         run: echo "S3_BUCKET_NAME=andrewwocbucket-${{ env.workspace }}" >> $GITHUB_ENV
 
-      - name: Export environment variables
+      - name: Export secrets to environment variables
         run: |
           echo "BUCKET_AWS_ACCESS_KEY_ID=${{ secrets.BUCKET_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "BUCKET_AWS_SECRET_ACCESS_KEY=${{ secrets.BUCKET_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
@@ -94,19 +96,8 @@ jobs:
         run: kubectl apply -f k8s/aws-auth-configmap.yaml
         working-directory: ./
 
-      - name: View Kubectl config view
-        run: kubectl config view
-
       - name: Apply Kubernetes configuration
         run: envsubst < k8s/deployment.yaml | kubectl apply -f -
-        working-directory: ./
-
-      - name: Get Kubectl Deployment
-        run: kubectl get deployments
-        working-directory: ./
-
-      - name: Get Kubectl Pods
-        run: kubectl get pods
         working-directory: ./
 
       - name: Apply Kube Load Balancer
