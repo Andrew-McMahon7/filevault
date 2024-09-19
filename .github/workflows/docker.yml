@@ -6,7 +6,7 @@ on:
       SONAR_TOKEN:
         description: 'SonarCloud token'
         required: true
-      AWS_ROLE_ARN:
+      AWS_ECR_ROLE_ARN:
         description: 'AWS Role ARN'
         required: true
       AWS_REGION:
