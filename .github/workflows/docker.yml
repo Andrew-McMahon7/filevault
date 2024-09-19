@@ -17,18 +17,18 @@ on:
         required: true
 
 jobs:
-#  soncarcloud:
-#    uses: ./.github/workflows/sonarscan.yml
-#    secrets:
-#      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#
-#  build-NodeJS:
-#    uses: ./.github/workflows/node.js.yml
+  soncarcloud:
+    uses: ./.github/workflows/sonarscan.yml
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  build-NodeJS:
+    uses: ./.github/workflows/node.js.yml
 
   build-and-push:
-#    needs:
-#      - build-NodeJS
-#      - soncarcloud
+    needs:
+      - build-NodeJS
+      - soncarcloud
 
     runs-on: ubuntu-latest
 
