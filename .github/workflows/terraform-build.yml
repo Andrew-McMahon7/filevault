@@ -17,8 +17,7 @@ jobs:
 
   terraform:
     needs:
-      - build-NodeJS
-      - soncarcloud
+      - docker
 
     runs-on: ubuntu-latest
 

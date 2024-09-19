@@ -13,6 +13,10 @@ jobs:
     uses: ./.github/workflows/node.js.yml
 
   build-and-push:
+    needs:
+      - build-NodeJS
+      - soncarcloud
+
     runs-on: ubuntu-latest
 
     defaults:
