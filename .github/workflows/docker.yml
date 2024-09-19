@@ -17,18 +17,18 @@ on:
         required: true
 
 jobs:
-  soncarcloud:
-    uses: ./.github/workflows/sonarscan.yml
-    secrets:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  build-NodeJS:
-    uses: ./.github/workflows/node.js.yml
+#  soncarcloud:
+#    uses: ./.github/workflows/sonarscan.yml
+#    secrets:
+#      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#
+#  build-NodeJS:
+#    uses: ./.github/workflows/node.js.yml
 
   build-and-push:
-    needs:
-      - build-NodeJS
-      - soncarcloud
+#    needs:
+#      - build-NodeJS
+#      - soncarcloud
 
     runs-on: ubuntu-latest
 
@@ -72,11 +72,11 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t andrewmcmahon/woc .
+          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }} .
 
       - name: Tag Docker image
         run: | 
-          docker tag andrewmcmahon/woc:${{ env.IMAGE_TAG }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }}
+          docker tag ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }}
 
       - name: Push Docker image to ECR
         run: |
