@@ -37,3 +37,29 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_agent_policy" {
 
   depends_on = [null_resource.enforce_workspace]
 }
+
+resource "aws_iam_role" "cloudwatch_observability_role" {
+  name = "eks-cloudwatch-observability-role-${local.environment}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "eks.amazonaws.com"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  depends_on = [null_resource.enforce_workspace]
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_observability_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+  role       = aws_iam_role.cloudwatch_observability_role.name
+
+  depends_on = [null_resource.enforce_workspace]
+}

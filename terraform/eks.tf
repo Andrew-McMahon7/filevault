@@ -51,3 +51,15 @@ resource "aws_eks_cluster" "filevault-eks" {
     aws_iam_role_policy_attachment.cluster-AdministratorAccess
   ]
 }
+
+resource "aws_eks_addon" "cloudwatch_observability" {
+  cluster_name = aws_eks_cluster.filevault-eks.name
+  addon_name   = "vpc-cni"
+  addon_version = "v1.7.5-eksbuild.1"
+
+  resolve_conflicts = "OVERWRITE"
+
+  service_account_role_arn = aws_iam_role.cloudwatch_observability_role.arn
+
+  depends_on = [aws_eks_cluster.filevault-eks]
+}
