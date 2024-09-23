@@ -71,12 +71,16 @@ jobs:
       - name: Login to ECR
         run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com
 
+      - name: Pull existing image for cache
+        run: |
+          docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }} || true
+
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }} .
+          docker build --cache-from ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }} -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }} .
 
       - name: Tag Docker image
-        run: | 
+        run: |
           docker tag ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }}
 
       - name: Push Docker image to ECR
