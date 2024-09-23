@@ -108,14 +108,14 @@ jobs:
           kubectl patch deployment filevault -p \
             "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"kubectl.kubernetes.io/restartedAt\":\"$(date +%Y-%m-%dT%H:%M:%S%z)\"}}}}}"
         working-directory: ./
-
-      - name: Delete Load Balancer
-        run: kubectl delete -f k8s/public-lb.yaml
-        working-directory: ./
-
-      - name: Delete Deployment
-        run: kubectl delete -f k8s/deployment.yaml
-        working-directory: ./
-
-      - name: Destroy Terraform configuration
-        run: terraform destroy -auto-approve
+#
+#      - name: Delete Load Balancer
+#        run: kubectl delete -f k8s/public-lb.yaml
+#        working-directory: ./
+#
+#      - name: Delete Deployment
+#        run: kubectl delete -f k8s/deployment.yaml
+#        working-directory: ./
+#
+#      - name: Destroy Terraform configuration
+#        run: terraform destroy -auto-approve
