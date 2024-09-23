@@ -10,3 +10,13 @@ terraform {
     }
   }
 }
+
+resource "null_resource" "enforce_workspace" {
+  provisioner "local-exec" {
+    command = "sh ./enforce_workspace.sh"
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+}

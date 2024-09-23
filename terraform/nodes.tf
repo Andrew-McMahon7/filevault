@@ -1,5 +1,5 @@
 resource "aws_iam_role" "nodes" {
-  name = "eks-node-group-nodes"
+  name = "eks-node-group-nodes-${local.environment}"
 
   assume_role_policy = jsonencode({
     Statement = [{
@@ -11,26 +11,41 @@ resource "aws_iam_role" "nodes" {
     }]
     Version = "2012-10-17"
   })
+
+  depends_on = [null_resource.enforce_workspace]
 }
 
 resource "aws_iam_role_policy_attachment" "nodes-AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.nodes.name
+
+  depends_on = [null_resource.enforce_workspace]
 }
 
 resource "aws_iam_role_policy_attachment" "nodes-AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = aws_iam_role.nodes.name
+
+  depends_on = [null_resource.enforce_workspace]
 }
 
 resource "aws_iam_role_policy_attachment" "nodes-AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.nodes.name
+
+  depends_on = [null_resource.enforce_workspace]
+}
+
+resource "aws_iam_role_policy_attachment" "nodes-AdministratorAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  role       = aws_iam_role.nodes.name
+
+  depends_on = [null_resource.enforce_workspace]
 }
 
 resource "aws_eks_node_group" "private-nodes" {
   cluster_name    = aws_eks_cluster.filevault-eks.name
-  node_group_name = "private-nodes"
+  node_group_name = "private-nodes-${local.environment}"
   node_role_arn   = aws_iam_role.nodes.arn
 
   subnet_ids = [
@@ -55,35 +70,11 @@ resource "aws_eks_node_group" "private-nodes" {
     role = "general"
   }
 
-  # taint {
-  #   key    = "team"
-  #   value  = "devops"
-  #   effect = "NO_SCHEDULE"
-  # }
-
-  # launch_template {
-  #   name    = aws_launch_template.eks-with-disks.name
-  #   version = aws_launch_template.eks-with-disks.latest_version
-  # }
-
   depends_on = [
     aws_iam_role_policy_attachment.nodes-AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.nodes-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.nodes-AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.nodes-AdministratorAccess,
+    null_resource.enforce_workspace
   ]
 }
-
-# resource "aws_launch_template" "eks-with-disks" {
-#   name = "eks-with-disks"
-
-#   key_name = "local-provisioner"
-
-#   block_device_mappings {
-#     device_name = "/dev/xvdb"
-
-#     ebs {
-#       volume_size = 50
-#       volume_type = "gp2"
-#     }
-#   }
-# }

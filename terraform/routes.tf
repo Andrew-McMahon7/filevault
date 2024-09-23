@@ -21,8 +21,10 @@ resource "aws_route_table" "private" {
   ]
 
   tags = {
-    Name = "private"
+    Name = "private-${local.environment}"
   }
+
+  depends_on = [null_resource.enforce_workspace]
 }
 
 resource "aws_route_table" "public" {
@@ -48,26 +50,36 @@ resource "aws_route_table" "public" {
   ]
 
   tags = {
-    Name = "public"
+    Name = "public-${local.environment}"
   }
+
+  depends_on = [null_resource.enforce_workspace]
 }
 
 resource "aws_route_table_association" "private-eu-west-2a" {
   subnet_id      = aws_subnet.private-eu-west-2a.id
   route_table_id = aws_route_table.private.id
+
+  depends_on = [null_resource.enforce_workspace]
 }
 
 resource "aws_route_table_association" "private-eu-west-2b" {
   subnet_id      = aws_subnet.private-eu-west-2b.id
   route_table_id = aws_route_table.private.id
+
+  depends_on = [null_resource.enforce_workspace]
 }
 
 resource "aws_route_table_association" "public-eu-west-2a" {
   subnet_id      = aws_subnet.public-eu-west-2a.id
   route_table_id = aws_route_table.public.id
+
+  depends_on = [null_resource.enforce_workspace]
 }
 
 resource "aws_route_table_association" "public-eu-west-2b" {
   subnet_id      = aws_subnet.public-eu-west-2b.id
   route_table_id = aws_route_table.public.id
+
+  depends_on = [null_resource.enforce_workspace]
 }

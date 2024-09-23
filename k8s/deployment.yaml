@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: filevault
-          image: 055624675055.dkr.ecr.eu-west-2.amazonaws.com/woc_image_repo_alm:latest
+          image: 055624675055.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${IMAGE_TAG}
+          imagePullPolicy: Always
           ports:
             - name: web
               containerPort: 3000
@@ -30,6 +31,8 @@ spec:
               value: ${AWS_REGION}
             - name: S3_BUCKET_NAME
               value: ${S3_BUCKET_NAME}
+            - name: DYNAMO_DB_TABLE
+              value: ${DYNAMO_DB_TABLE}
           resources:
             requests:
               memory: 256Mi

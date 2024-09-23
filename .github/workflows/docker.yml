@@ -1,0 +1,84 @@
+name: Build and Push Docker Image to ECR
+
+on:
+  workflow_call:
+    secrets:
+      SONAR_TOKEN:
+        description: 'SonarCloud token'
+        required: true
+      AWS_ECR_ROLE_ARN:
+        description: 'AWS Role ARN'
+        required: true
+      AWS_REGION:
+        description: 'AWS Region'
+        required: true
+      AWS_ACCOUNT_ID:
+        description: 'AWS Account ID'
+        required: true
+
+jobs:
+  soncarcloud:
+    uses: ./.github/workflows/sonarscan.yml
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  build-NodeJS:
+    uses: ./.github/workflows/node.js.yml
+
+  build-and-push:
+    needs:
+      - build-NodeJS
+      - soncarcloud
+
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./src/aws-s3
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          role-to-assume: ${{ secrets.AWS_ECR_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Set image tag
+        id: image_tag
+        run: |
+          if [ "${{ steps.extract_branch.outputs.branch }}" == "main" ]; then
+            echo "IMAGE_TAG=latest" >> $GITHUB_ENV
+          else
+            echo "IMAGE_TAG=pr-${{ github.event.number }}" >> $GITHUB_ENV
+          fi
+
+      - name: Login to ECR
+        run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }} .
+
+      - name: Tag Docker image
+        run: | 
+          docker tag ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }}
+
+      - name: Push Docker image to ECR
+        run: |
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-west-2.amazonaws.com/andrewmcmahon/woc:${{ env.IMAGE_TAG }}
