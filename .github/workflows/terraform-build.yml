@@ -103,6 +103,18 @@ jobs:
         run: kubectl apply -f k8s/public-lb.yaml
         working-directory: ./
 
+      - name: Apply CloudWatch Agent ConfigMap
+        run: kubectl apply -f k8s/cloudwatch-agent-configmap.yaml
+        working-directory: ./
+
+      - name: Apply CloudWatch Agent Service Account
+        run: kubectl apply -f k8s/cloudwatch-agent-service-account.yaml
+        working-directory: ./
+
+      - name: Apply CloudWatch Agent DaemonSet
+        run: kubectl apply -f k8s/cloudwatch-agent-daemonset.yaml
+        working-directory: ./
+
       - name: Patch Deployment to force re-deploy
         run: |
           kubectl patch deployment filevault -p \

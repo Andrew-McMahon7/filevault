@@ -11,3 +11,29 @@ resource "aws_iam_openid_connect_provider" "eks" {
 
   depends_on = [null_resource.enforce_workspace]
 }
+
+resource "aws_iam_role" "cloudwatch_agent_role" {
+  name = "eks-cloudwatch-agent-role-${local.environment}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  depends_on = [null_resource.enforce_workspace]
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_agent_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+  role       = aws_iam_role.cloudwatch_agent_role.name
+
+  depends_on = [null_resource.enforce_workspace]
+}

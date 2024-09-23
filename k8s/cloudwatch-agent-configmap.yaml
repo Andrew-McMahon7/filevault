@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudwatch-agent-config
+  namespace: kube-system
+  labels:
+    app: cloudwatch-agent
+data:
+  cloudwatch-agent-config.json: |
+    {
+      "logs": {
+        "logs_collected": {
+          "kubernetes": {
+            "cluster_name": "filevault-eks-${local.environment}",
+            "log_stream_name": "{instance_id}"
+          }
+        }
+      }
+    }
