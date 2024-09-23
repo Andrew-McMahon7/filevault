@@ -55,7 +55,7 @@ resource "aws_eks_cluster" "filevault-eks" {
 resource "aws_eks_addon" "cloudwatch_observability" {
   cluster_name = aws_eks_cluster.filevault-eks.name
   addon_name   = "vpc-cni"
-  addon_version = "v1.7.5-eksbuild.1"
+  addon_version = "v1.18.3-eksbuild.3"
 
   resolve_conflicts = "OVERWRITE"
 
