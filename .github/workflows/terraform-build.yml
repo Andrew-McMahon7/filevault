@@ -103,6 +103,15 @@ jobs:
         run: kubectl apply -f k8s/public-lb.yaml
         working-directory: ./
 
+      - name: Install CloudWatch Agent and Fluent Bit
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/aws/amazon-cloudwatch-agent/main/k8s/quickstart/cwagent-fluent-bit-quickstart.yaml
+
+      - name: Create CloudWatch Agent ConfigMap
+        run: |
+          kubectl create configmap cwagentconfig --from-file=k8s/cwagent-config.json -n amazon-cloudwatch
+          kubectl apply -f https://raw.githubusercontent.com/aws/amazon-cloudwatch-agent/main/k8s/quickstart/cwagent-fluent-bit-quickstart.yaml
+
       - name: Patch Deployment to force re-deploy
         run: |
           kubectl patch deployment filevault -p \

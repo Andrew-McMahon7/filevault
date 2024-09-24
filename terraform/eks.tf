@@ -68,3 +68,10 @@ resource "aws_cloudwatch_log_group" "eks_log_group" {
 
   depends_on = [null_resource.enforce_workspace]
 }
+
+resource "aws_cloudwatch_log_group" "app_log_group" {
+  name              = "/aws/eks/filevault-eks-${local.environment}/application"
+  retention_in_days = 7
+
+  depends_on = [null_resource.enforce_workspace]
+}
