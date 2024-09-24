@@ -105,12 +105,12 @@ jobs:
 
       - name: Install CloudWatch Agent and Fluent Bit
         run: |
-          kubectl apply -f https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/blob/main/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/quickstart/cwagent-fluent-bit-quickstart.yaml
+          kubectl apply -f https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/cloudwatch-namespace.yaml
 
       - name: Create CloudWatch Agent ConfigMap
         run: |
           kubectl create configmap cwagentconfig --from-file=k8s/cwagent-config.json -n amazon-cloudwatch
-          kubectl apply -f https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/blob/main/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/quickstart/cwagent-fluent-bit-quickstart.yaml
+          kubectl apply -f https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/cloudwatch-namespace.yaml
 
       - name: Patch Deployment to force re-deploy
         run: |
