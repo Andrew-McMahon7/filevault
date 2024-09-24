@@ -111,6 +111,7 @@ jobs:
         run: |
           kubectl create configmap cwagentconfig --from-file=k8s/cwagent-config.json -n amazon-cloudwatch
           kubectl apply -f https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/fluent-bit/fluent-bit.yaml
+        working-directory: ./
 
       - name: Patch Deployment to force re-deploy
         run: |
